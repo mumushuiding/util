@@ -20,6 +20,13 @@ func ToPageJSON(datas interface{}, count, pageIndex, pageSize int) (string, erro
 	return result, err
 }
 
+// Str2Struct Str2Struct
+// 字符串转对象
+func Str2Struct(source string, destination interface{}) error {
+	err := json.Unmarshal([]byte(source), destination)
+	return err
+}
+
 // Body2Map 获取前台传递的body值，并转化成map
 func Body2Map(request *http.Request) (map[string]interface{}, error) {
 	s, _ := ioutil.ReadAll(request.Body)
