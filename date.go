@@ -19,3 +19,17 @@ func FormatDate(date time.Time, format string) string {
 func ParseDate(date string, format string) (time.Time, error) {
 	return time.Parse(format, date)
 }
+
+// TimeStrSub 日期字符串相减 datestr1-datestr2  返回int
+func TimeStrSub(datestr1, datestr2, format string) (int64, error) {
+	d1, err := ParseDate(datestr1, format)
+	if err != nil {
+		return 0, err
+	}
+	d2, err := ParseDate(datestr2, format)
+	if err != nil {
+		return 0, err
+	}
+	result := d1.Unix() - d2.Unix()
+	return result, nil
+}
