@@ -13,7 +13,12 @@ func Response(writer http.ResponseWriter, data string, ok bool) {
 
 // ResponseErr 返回错误给前台
 func ResponseErr(w http.ResponseWriter, data interface{}) {
-	fmt.Fprintf(w, "{\"message\":\"%s\",\"ok\":%t}", data, false)
+	str, err := ToJSONStr(data)
+	if err != nil {
+		fmt.Fprintf(w, "{\"message\":\"%s\",\"ok\":%t}", err, false)
+		return
+	}
+	fmt.Fprintf(w, "{\"message\":\"%s\",\"ok\":%t}", str, false)
 }
 
 // ResponseOk 返回成功
