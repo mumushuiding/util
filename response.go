@@ -25,3 +25,8 @@ func ResponseErr(w http.ResponseWriter, data interface{}) {
 func ResponseOk(w http.ResponseWriter) {
 	fmt.Fprintf(w, "{\"message\":\"%s\",\"ok\":%t}", "成功", true)
 }
+
+// ResponseNo 返回失败
+func ResponseNo(w http.ResponseWriter) {
+	fmt.Fprintf(w, "{\"message\":\"%s\",\"ok\":%t}", "失败", false)
+}
