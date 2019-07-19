@@ -21,18 +21,6 @@ func StructSetValByReflect(structname interface{}, fieldname string, value inter
 		return errors.New("field的类型为【" + field.Type().String() + "】,value的类型为【" + valueType + "】,两者不匹配")
 	}
 	field.Set(reflect.ValueOf(value))
-	// switch valueType {
-	// case "string":
-	// 	field.SetString(value.(string))
-	// 	break
-	// case "int":
-	// 	fi
-	// 	field.SetInt(value.(int))
-	// 	break
-	// case "bool":
-	// 	field.SetBool(value.(bool))
-	// 	break
-	// }
 	return nil
 }
 
