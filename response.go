@@ -3,6 +3,7 @@ package util
 import (
 	"fmt"
 	"net/http"
+	"strings"
 )
 
 // Response 返回信息给前台
@@ -13,11 +14,8 @@ func Response(writer http.ResponseWriter, data string, ok bool) {
 
 // ResponseErr 返回错误给前台
 func ResponseErr(w http.ResponseWriter, data interface{}) {
-	str, err := ToJSONStr(data)
-	if err != nil {
-		fmt.Fprintf(w, "{\"message\":\"%s\",\"ok\":%t}", err, false)
-		return
-	}
+	str := fmt.Sprintf("%v", data)
+	str = strings.ReplaceAll(str, "\"", "'")
 	fmt.Fprintf(w, "{\"message\":\"%s\",\"ok\":%t}", str, false)
 }
 
@@ -27,6 +25,6 @@ func ResponseOk(w http.ResponseWriter) {
 }
 
 // ResponseNo 返回失败
-func ResponseNo(w http.ResponseWriter) {
-	fmt.Fprintf(w, "{\"message\":\"%s\",\"ok\":%t}", "失败", false)
+func ResponseNo(w http.ResponseWriter, data string) {
+	fmt.Fprintf(w, "{\"message\":\"%s\",\"ok\":%t}", data, false)
 }

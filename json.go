@@ -2,6 +2,7 @@ package util
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
 	"io/ioutil"
 	"net/http"
@@ -49,4 +50,15 @@ func Body2Struct(r *http.Request, pojo interface{}) (err error) {
 	}
 	err = json.Unmarshal(s, pojo)
 	return err
+}
+
+// GetBody 获取 body 值，并存储到指定 struct 中去
+func GetBody(result interface{}, w http.ResponseWriter, r *http.Request) error {
+	if r.Method != "POST" {
+		return errors.New("只支持POST方法")
+	}
+	if err := Body2Struct(r, result); err != nil {
+		return err
+	}
+	return nil
 }
