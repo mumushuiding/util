@@ -1,6 +1,9 @@
 package util
 
-import "time"
+import (
+	"fmt"
+	"time"
+)
 
 const (
 	YYYY_MM_DD = "2006-01-02"
@@ -32,4 +35,10 @@ func TimeStrSub(datestr1, datestr2, format string) (int64, error) {
 	}
 	result := d1.Unix() - d2.Unix()
 	return result, nil
+}
+
+// FirstDayOfCurrentYearAsString 返回今年的第一天，格式为 2019-01-01
+func FirstDayOfCurrentYearAsString() string {
+	year := time.Now().Year()
+	return fmt.Sprintf("%d-01-01", year)
 }
