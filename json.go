@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net/http"
+	"net/url"
 )
 
 // ToJSONStr 对象转换成字符串
@@ -29,9 +30,23 @@ func Str2Struct(source string, destination interface{}) error {
 	return err
 }
 
+// Str2Map 字符转Map
+func Str2Map(source string) (map[string]interface{}, error) {
+	res := make(map[string]interface{})
+	err := json.Unmarshal([]byte(source), &res)
+	return res, err
+}
+
+// Body2MapWithDecode 获取已经编码的POST参数,并转换成map
+// 每个key的存储对象是数组[], 用Get方法获取
+func Body2MapWithDecode(r *http.Request) (url.Values, error) {
+	s, _ := ioutil.ReadAll(r.Body)
+	return url.ParseQuery(string(s))
+}
+
 // Body2Map 获取前台传递的body值，并转化成map
-func Body2Map(request *http.Request) (map[string]interface{}, error) {
-	s, _ := ioutil.ReadAll(request.Body)
+func Body2Map(r *http.Request) (map[string]interface{}, error) {
+	s, _ := ioutil.ReadAll(r.Body)
 	if len(s) == 0 {
 		return nil, nil
 	}
@@ -44,12 +59,10 @@ func Body2Map(request *http.Request) (map[string]interface{}, error) {
 }
 
 // Body2Struct 获取前台传递的body值，并转化成指定结构体
-func Body2Struct(r *http.Request, pojo interface{}) (err error) {
-	s, _ := ioutil.ReadAll(r.Body)
-	if len(s) == 0 {
-		return nil
-	}
-	err = json.Unmarshal(s, pojo)
+func Body2Struct(r *http.Request, pojo interface{}) error {
+
+	err := json.NewDecoder(r.Body).Decode(&pojo)
+
 	return err
 }
 
@@ -62,4 +75,12 @@ func GetBody(result interface{}, w http.ResponseWriter, r *http.Request) error {
 		return err
 	}
 	return nil
+}
+
+// PrintHTTPRequestInfo 打印http请求的详细信息
+func PrintHTTPRequestInfo(r *http.Request) {
+	s, _ := ioutil.ReadAll(r.Body)
+	body := make(map[string]interface{})
+	json.Unmarshal(s, &body)
+	fmt.Println("body:", body)
 }
