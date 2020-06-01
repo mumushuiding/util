@@ -1,6 +1,7 @@
 package util
 
 import (
+	"fmt"
 	"math/rand"
 	"strings"
 )
@@ -10,7 +11,7 @@ import (
 func RandomNumbers(len int) string {
 	var buff strings.Builder
 	for i := 0; i < len; i++ {
-		buff.WriteString(string(rand.Intn(9)))
+		buff.WriteString(fmt.Sprintf("%d", rand.Intn(9)))
 	}
 	return buff.String()
 }
