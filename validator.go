@@ -1,6 +1,8 @@
 package util
 
-import "regexp"
+import (
+	"regexp"
+)
 
 // IsDoubleStr 验证是否是浮点字符串
 func IsDoubleStr(doubelstr string) (bool, error) {

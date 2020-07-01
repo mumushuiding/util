@@ -92,7 +92,12 @@ func DateStrSubDays3(start, end string) (int, error) {
 		return 0, err
 	}
 	// result := math.Ceil((d2.Sub(d1).Hours() / 24))
-	return int(math.Ceil((d2.Sub(d1).Hours() / 24))), nil
+	return DateSubReturnDays(d1, d2)
+}
+
+// DateSubReturnDays end-start返回天数
+func DateSubReturnDays(start, end time.Time) (int, error) {
+	return int(math.Ceil((end.Sub(start).Hours() / 24))), nil
 }
 
 // FirstDayOfCurrentYearAsString 返回今年的第一天，格式为 2019-01-01
