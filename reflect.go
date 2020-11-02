@@ -2,10 +2,48 @@ package util
 
 import (
 	"errors"
+	"fmt"
 	"reflect"
 	"regexp"
 	"strings"
 )
+
+// Transform2Csv 将数组转换成csv对象
+// header 表示转换后的行标如:["用户名","部门"]
+// fields 表示行标对应的字段:["Username","DeptName"]
+// datas 是struct数组
+func Transform2Csv(header []interface{}, fields []interface{}, datas interface{}) ([]interface{}, error) {
+	if datas == nil {
+		return []interface{}{}, nil
+	}
+	if len(header) == 0 || len(fields) == 0 {
+		return nil, errors.New("数据转换成csv格式时,行标和字段名不能为空")
+	}
+	// 获取结果集
+	s := reflect.ValueOf(datas)
+	var result []interface{}
+	// 遍历结果
+	for i := 0; i < s.Len(); i++ {
+		var row []string
+		for _, f := range fields {
+			// log.Println(f)
+			item := s.Index(i)
+			// str, _ := util.ToJSONStr(item.Interface())
+			// log.Println(str)
+			value := item.Elem().FieldByName(f.(string))
+			// log.Println("val:", value.String())
+			if value.IsValid() {
+				row = append(row, fmt.Sprintf("%s", value.String()))
+			} else {
+				row = append(row, fmt.Sprintf("%s", ""))
+
+			}
+
+		}
+		result = append(result, row)
+	}
+	return result, nil
+}
 
 // StructSetValByReflect StructSetValByReflect
 // structname 是一个指针变量
