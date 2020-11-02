@@ -2,7 +2,7 @@ package util
 
 import "errors"
 
-// Interface2Int interface{}转换成数字
+// Interface2Int interface{} 转换成数字
 func Interface2Int(value interface{}) (int, error) {
 	if value == nil {
 		return 0, errors.New("interface转换成数字失败:interface 值为nil")
