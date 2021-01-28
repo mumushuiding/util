@@ -26,14 +26,16 @@ func Transform2Csv(header []interface{}, fields []interface{}, datas interface{}
 	for i := 0; i < s.Len(); i++ {
 		var row []string
 		for _, f := range fields {
-			// log.Println(f)
+
 			item := s.Index(i)
-			// str, _ := util.ToJSONStr(item.Interface())
-			// log.Println(str)
-			value := item.Elem().FieldByName(f.(string))
-			// log.Println("val:", value.String())
-			if value.IsValid() {
-				row = append(row, fmt.Sprintf("%s", value.String()))
+			str, _ := util.ToJSONStr(item.Interface())
+			data, err := util.Str2Map(str)
+			if err != nil {
+				return []interface{}{}, nil
+			}
+			value := data[f.(string)]
+			if value != nil {
+				row = append(row, fmt.Sprintf("%v", value))
 			} else {
 				row = append(row, fmt.Sprintf("%s", ""))
 

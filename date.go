@@ -65,7 +65,7 @@ func ParseDate3(date string) (time.Time, error) {
 // IsDate3 判断字符串格式是否是:yyyy-mm-dd
 func IsDate3(date string) (bool, error) {
 	if len(date) != 10 {
-		return false, fmt.Errorf("日期格式必须是:yyyy-mm-dd,共10位")
+		return false, fmt.Errorf("日期格式必须是:yyyy-mm-dd,共10位,且有些月份没有31和30号")
 	}
 	return regexp.MatchString(`([0-9]{3}[1-9]|[0-9]{2}[1-9][0-9]{1}|[0-9]{1}[1-9][0-9]{2}|[1-9][0-9]{3})-(((0[13578]|1[02])-(0[1-9]|[12][0-9]|3[01]))|((0[469]|11)-(0[1-9]|[12][0-9]|30))|(02-(0[1-9]|[1][0-9]|2[0-8])))`, date)
 
