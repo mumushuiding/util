@@ -1,9 +1,7 @@
 package util
 
 import (
-	"encoding/json"
 	"errors"
-	"fmt"
 	"reflect"
 	"regexp"
 	"strings"
@@ -40,42 +38,6 @@ func Transform2Csv(header []interface{}, fields []interface{}, datas interface{}
 		result = append(result, row)
 	}
 	return result, nil
-}
-
-// ToJSONStr 对象转换成字符串
-// 对象字段必须大写,否则结果为空
-func ToJSONStr(data interface{}) (string, error) {
-	result, err := json.Marshal(data)
-	return fmt.Sprintf("%s", result), err
-}
-
-// Str2Map 字符转Map
-func Str2Map(source string) (map[string]interface{}, error) {
-	res := make(map[string]interface{})
-	err := json.Unmarshal([]byte(source), &res)
-	return res, err
-}
-
-// Interface2String 对象转字符串
-func Interface2String(value interface{}) string {
-	if value == nil {
-		return ""
-	}
-	switch value.(type) {
-	case string:
-		if len(value.(string)) == 0 {
-			return ""
-		}
-		return value.(string)
-	case int:
-		return fmt.Sprintf("%d", value)
-	case float64:
-		return fmt.Sprintf("%f", value)
-	case float32:
-		return fmt.Sprintf("%f", value)
-	default:
-		return ""
-	}
 }
 
 // StructSetValByReflect StructSetValByReflect
