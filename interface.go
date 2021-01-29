@@ -3,7 +3,6 @@ package util
 import (
 	"errors"
 	"fmt"
-	"reflect"
 )
 
 // Interface2Int interface{} 转换成数字
@@ -24,24 +23,24 @@ func Interface2Int(value interface{}) (int, error) {
 }
 
 // Interface2String 对象转字符串
-func Interface2String(value interface{}) (string, error) {
+func Interface2String(value interface{}) string {
 	if value == nil {
-		return "", errors.New("interface转换成字符串失败:interface 值为nil")
+		return ""
 	}
 	switch value.(type) {
 	case string:
 		if len(value.(string)) == 0 {
-			return "", errors.New("字符串不能为空")
+			return ""
 		}
-		return value.(string), nil
+		return value.(string)
 	case int:
-		return fmt.Sprintf("%d", value), nil
+		return fmt.Sprintf("%d", value)
 	case float64:
-		return fmt.Sprintf("%f", value), nil
+		return fmt.Sprintf("%f", value)
 	case float32:
-		return fmt.Sprintf("%f", value), nil
+		return fmt.Sprintf("%f", value)
 	default:
-		return "", fmt.Errorf("%v无法转换成字符串", reflect.TypeOf(value))
+		return ""
 	}
 }
 

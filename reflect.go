@@ -1,6 +1,7 @@
 package util
 
 import (
+	"encoding/json"
 	"errors"
 	"fmt"
 	"reflect"
@@ -26,25 +27,55 @@ func Transform2Csv(header []interface{}, fields []interface{}, datas interface{}
 	for i := 0; i < s.Len(); i++ {
 		var row []string
 		for _, f := range fields {
-
+			// log.Println(f)
 			item := s.Index(i)
-			str, _ := util.ToJSONStr(item.Interface())
-			data, err := util.Str2Map(str)
+			str, _ := ToJSONStr(item.Interface())
+			data, err := Str2Map(str)
 			if err != nil {
-				return []interface{}{}, nil
+				return make([]interface{}, 0), err
 			}
-			value := data[f.(string)]
-			if value != nil {
-				row = append(row, fmt.Sprintf("%v", value))
-			} else {
-				row = append(row, fmt.Sprintf("%s", ""))
-
-			}
-
+			value := Interface2String(data[f.(string)])
+			row = append(row, value)
 		}
 		result = append(result, row)
 	}
 	return result, nil
+}
+
+// ToJSONStr 对象转换成字符串
+// 对象字段必须大写,否则结果为空
+func ToJSONStr(data interface{}) (string, error) {
+	result, err := json.Marshal(data)
+	return fmt.Sprintf("%s", result), err
+}
+
+// Str2Map 字符转Map
+func Str2Map(source string) (map[string]interface{}, error) {
+	res := make(map[string]interface{})
+	err := json.Unmarshal([]byte(source), &res)
+	return res, err
+}
+
+// Interface2String 对象转字符串
+func Interface2String(value interface{}) string {
+	if value == nil {
+		return ""
+	}
+	switch value.(type) {
+	case string:
+		if len(value.(string)) == 0 {
+			return ""
+		}
+		return value.(string)
+	case int:
+		return fmt.Sprintf("%d", value)
+	case float64:
+		return fmt.Sprintf("%f", value)
+	case float32:
+		return fmt.Sprintf("%f", value)
+	default:
+		return ""
+	}
 }
 
 // StructSetValByReflect StructSetValByReflect
