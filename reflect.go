@@ -1,7 +1,9 @@
 package util
 
 import (
+	"encoding/json"
 	"errors"
+	"fmt"
 	"reflect"
 	"regexp"
 	"strings"
@@ -27,17 +29,48 @@ func Transform2Csv(header []interface{}, fields []interface{}, datas interface{}
 		for _, f := range fields {
 			// log.Println(f)
 			item := s.Index(i)
-			str, _ := ToJSONStr(item.Interface())
-			data, err := Str2Map(str)
+			str, _ := toJSONStr(item.Interface())
+			data, err := str2Map(str)
 			if err != nil {
 				return make([]interface{}, 0), err
 			}
-			value := Interface2String(data[f.(string)])
+			value := interface2String(data[f.(string)])
 			row = append(row, value)
 		}
 		result = append(result, row)
 	}
 	return result, nil
+}
+func toJSONStr(data interface{}) (string, error) {
+	result, err := json.Marshal(data)
+	return fmt.Sprintf("%s", result), err
+}
+
+func str2Map(source string) (map[string]interface{}, error) {
+	res := make(map[string]interface{})
+	err := json.Unmarshal([]byte(source), &res)
+	return res, err
+}
+
+func interface2String(value interface{}) string {
+	if value == nil {
+		return ""
+	}
+	switch value.(type) {
+	case string:
+		if len(value.(string)) == 0 {
+			return ""
+		}
+		return value.(string)
+	case int:
+		return fmt.Sprintf("%d", value)
+	case float64:
+		return fmt.Sprintf("%f", value)
+	case float32:
+		return fmt.Sprintf("%f", value)
+	default:
+		return ""
+	}
 }
 
 // StructSetValByReflect StructSetValByReflect
