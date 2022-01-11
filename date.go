@@ -155,8 +155,8 @@ func SecondsToTimesStr2(seconds int) string {
 }
 
 // GetLastMonthStartAndEnd 获取上月开始第一天和最后一天
-func GetLastMonthStartAndEnd() (time.Time, time.Time) {
-	now := time.Now()
+func GetLastMonthStartAndEnd(lastmonth time.Time) (time.Time, time.Time) {
+	now := lastmonth
 	firtOfMonth := time.Date(now.Year(), now.Month(), 1, 23, 59, 59, 0, now.Location())
 	end := firtOfMonth.AddDate(0, 0, -1)
 	start := time.Date(end.Year(), end.Month(), 1, 0, 0, 0, 0, end.Location())
